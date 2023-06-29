@@ -13,8 +13,7 @@ func NewApp(lc fx.Lifecycle, s server.Server) *contracts.App {
 	app.Server(s)
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
-			println("Aqui")
-			app.Start()
+			go app.Start()
 			return nil
 		},
 	})
