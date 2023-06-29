@@ -1,23 +1,21 @@
 package main
 
 import (
-	"goHexBoilerplate/src/infra/server"
+	"go.uber.org/fx"
+	domainServer "goHexBoilerplate/src/domain/contracts/server"
+	infraFx "goHexBoilerplate/src/infra/fx"
 )
 
 func main() {
-	var app = server.NewApp()
-	var ginServer = server.NewGinServer(3000)
-	app.Name("Boilerplate Service")
-	app.Server(&ginServer.AbstractServer)
-	app.Start()
-	//r := gin.Default()
-	//var cam int
-	//fmt.Println(cam)
-	//fmt.Println(cam)
-	//r.GET("/ping", func(c *gin.Context) {
-	//	c.JSON(http.StatusOK, gin.H{
-	//		"message": "pong",
-	//	})
-	//})
-	//r.Run()
+	fx.New(
+		fx.Provide(
+			func() infraFx.AppConfig { return infraFx.AppConfig{Port: 3000} },
+			infraFx.NewApp,
+			fx.Annotate(
+				infraFx.NewGinServer,
+				fx.As(new(domainServer.Server)),
+			),
+		),
+		fx.Invoke(func(app *domainServer.App) {}),
+	).Run()
 }

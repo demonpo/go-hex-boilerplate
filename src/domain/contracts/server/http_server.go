@@ -5,13 +5,13 @@ type Server interface {
 }
 
 type AbstractServer struct {
-	port int
+	Port int
 	Server
 }
 
 type App struct {
 	appName string
-	server  *AbstractServer
+	server  Server
 }
 
 func NewApp() *App {
@@ -23,7 +23,7 @@ func (app *App) Name(name string) *App {
 	return app
 }
 
-func (app *App) Server(server *AbstractServer) *App {
+func (app *App) Server(server Server) *App {
 	app.server = server
 	return app
 }
