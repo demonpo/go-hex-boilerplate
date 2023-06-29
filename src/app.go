@@ -2,6 +2,7 @@ package main
 
 import (
 	"go.uber.org/fx"
+	"goHexBoilerplate/src/domain/contracts"
 	domainServer "goHexBoilerplate/src/domain/contracts/server"
 	infraFx "goHexBoilerplate/src/infra/fx"
 )
@@ -16,6 +17,6 @@ func main() {
 				fx.As(new(domainServer.Server)),
 			),
 		),
-		fx.Invoke(func(app *domainServer.App) {}),
+		fx.Invoke(func(app *contracts.App) {}),
 	).Run()
 }
