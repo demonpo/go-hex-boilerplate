@@ -2,12 +2,14 @@ FROM golang:1.19 as common-build-stage
 WORKDIR /app
 COPY . .
 RUN go mod download
-RUN ls .
+
+# Utils
+RUN go install github.com/go-task/task/v3/cmd/task@latest
+
 # Build
-RUN CGO_ENABLED=0 GOOS=linux go build -o app ./src/app.go
+RUN task build
 RUN chmod +x ./app
-RUN ls .
-RUN ls -l ./app
+
 EXPOSE 3000
 
 # Run
