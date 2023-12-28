@@ -2,6 +2,7 @@ package main
 
 import (
 	"go.uber.org/fx"
+	handler "goHexBoilerplate/src/adapters/handlers"
 	"goHexBoilerplate/src/domain/contracts"
 	domainServer "goHexBoilerplate/src/domain/contracts/server"
 	infraFx "goHexBoilerplate/src/infra/fx"
@@ -10,6 +11,7 @@ import (
 func main() {
 	fx.New(
 		fx.Provide(
+			handler.NewUserHandler,
 			func() infraFx.AppConfig { return infraFx.AppConfig{Port: 3000} },
 			infraFx.NewApp,
 			fx.Annotate(
