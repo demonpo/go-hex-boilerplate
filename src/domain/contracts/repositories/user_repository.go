@@ -9,6 +9,6 @@ type GetByPropertiesParams struct {
 }
 
 type UserRepository interface {
-	getById(id int) entities.User
-	getByProperties(params GetByPropertiesParams) []entities.User
+	GetById(id string) (entities.User, error)
+	GetByProperties(params GetByPropertiesParams) ([]entities.User, error)
 }

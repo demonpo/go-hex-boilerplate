@@ -12,10 +12,10 @@ func NewPostgresUserRepository() *PostgresUserRepository {
 	return &PostgresUserRepository{}
 }
 
-func (userRepository *PostgresUserRepository) getById(id int) (entities.User, error) {
-	return entities.User{}, nil
+func (userRepository *PostgresUserRepository) GetById(id string) (entities.User, error) {
+	return entities.User{Id: 1, Name: "Daniel", Email: "soul.daniel@hotmail.com"}, nil
 }
 
-func (userRepository *PostgresUserRepository) getByProperties(params repositories.GetByPropertiesParams) ([]entities.User, error) {
+func (userRepository *PostgresUserRepository) GetByProperties(params repositories.GetByPropertiesParams) ([]entities.User, error) {
 	return []entities.User{entities.User{Id: 1, Name: "Daniel", Email: "soul.daniel@hotmail.com"}, entities.User{Id: 2, Name: "Xavier", Email: "xavicoGarcia12@gmail.com"}}, nil
 }

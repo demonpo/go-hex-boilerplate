@@ -12,12 +12,14 @@ import (
 )
 
 type UserHandler struct {
-	svc services.UserService
+	userService *services.UserService
 }
 
-func NewUserHandler(UserService services.UserService) *UserHandler {
+func NewUserHandler(UserService *services.UserService) *UserHandler {
+	fmt.Println("NewUserHandler")
+	fmt.Println(UserService)
 	return &UserHandler{
-		svc: UserService,
+		userService: UserService,
 	}
 }
 
@@ -42,7 +44,7 @@ func NewUserHandler(UserService services.UserService) *UserHandler {
 func (h *UserHandler) ReadUser(ctx *gin.Context) {
 	id := ctx.Param("id")
 
-	user, err := h.svc.GetById(id)
+	user, err := h.userService.GetById(id)
 
 	if err != nil {
 		HandleError(ctx, http.StatusBadRequest, err)
@@ -53,7 +55,7 @@ func (h *UserHandler) ReadUser(ctx *gin.Context) {
 
 func (h *UserHandler) ReadUsers(ctx *gin.Context) {
 
-	user, err := h.svc.GetById("1")
+	user, err := h.userService.GetById("1")
 	if err != nil {
 		HandleError(ctx, http.StatusBadRequest, err)
 		return
