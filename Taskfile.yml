@@ -12,3 +12,6 @@ tasks:
   db:create-migration:
     cmds:
       - migrate create -ext sql -dir ./src/infra/db/migrations -seq {{.CLI_ARGS}}
+  install-atlas:
+    cmds:
+      - curl -sSf https://atlasgo.sh | sh
