@@ -1,6 +1,8 @@
 package main
 
 import (
+	"ariga.io/atlas-provider-gorm/gormschema"
+	"fmt"
 	"github.com/joho/godotenv"
 	"go.uber.org/fx"
 	handler "goHexBoilerplate/src/adapters/handlers"
@@ -9,15 +11,28 @@ import (
 	domainServer "goHexBoilerplate/src/domain/contracts/server"
 	"goHexBoilerplate/src/domain/services"
 	"goHexBoilerplate/src/infra/db"
+	infraEntities "goHexBoilerplate/src/infra/entities"
 	infraFx "goHexBoilerplate/src/infra/fx"
 	"goHexBoilerplate/src/infra/repositories"
 	"goHexBoilerplate/src/infra/server"
+	"io"
+	"os"
 )
 
 func main() {
 	err := godotenv.Load()
 	if err != nil {
 		panic(err)
+	}
+
+	stmts, err := gormschema.New("mysql").Load(&infraEntities.User{})
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "failed to load gorm schema: %v\n", err)
+		os.Exit(1)
+	}
+	_, err = io.WriteString(os.Stdout, stmts)
+	if err != nil {
+		return
 	}
 
 	fx.New(
