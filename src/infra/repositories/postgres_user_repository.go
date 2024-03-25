@@ -1,9 +1,9 @@
 package repositories
 
 import (
+	"goHexBoilerplate/src/db"
 	"goHexBoilerplate/src/domain/contracts/entities"
 	"goHexBoilerplate/src/domain/contracts/repositories"
-	"goHexBoilerplate/src/infra/db"
 )
 
 type PostgresUserRepository struct {

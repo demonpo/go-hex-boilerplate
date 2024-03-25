@@ -14,6 +14,11 @@ services:
       POSTGRESQL_USERNAME: postgres
       POSTGRESQL_PASSWORD: password
       POSTGRESQL_DATABASE: test
+      DB_HOST: database
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: password
+      DB_NAME: test
     ports:
       - '3000:3000'
     networks:
@@ -25,7 +30,7 @@ services:
 
   database:
     container_name: database
-    image: postgres:11-alpine
+    image: postgres:16-alpine
     restart: always
     environment:
       POSTGRES_PASSWORD: password

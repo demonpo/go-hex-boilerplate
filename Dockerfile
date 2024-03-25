@@ -1,7 +1,8 @@
-FROM golang:1.19 as common-build-stage
+FROM golang:1.21 as common-build-stage
 WORKDIR /app
 COPY . .
 RUN go mod download
+RUN go mod tidy
 
 # Utils
 RUN go install github.com/go-task/task/v3/cmd/task@latest

@@ -11,7 +11,8 @@ tasks:
       - go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
   db:create-migration:
     cmds:
-      - migrate create -ext sql -dir ./src/infra/db/migrations -seq {{.CLI_ARGS}}
+      - atlas migrate diff --env gorm
+    silent: false
   install-atlas:
     cmds:
       - curl -sSf https://atlasgo.sh | sh
