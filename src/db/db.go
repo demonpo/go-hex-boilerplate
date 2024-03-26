@@ -23,8 +23,7 @@ func NewDB() *DB {
 		host, port, user, password, dbname)
 
 	db, err := gorm.Open(postgres.New(postgres.Config{
-		DSN:                  conn,
-		PreferSimpleProtocol: true, // disables implicit prepared statement usage
+		DSN: conn,
 	}), &gorm.Config{})
 	if err != nil {
 		panic(err)

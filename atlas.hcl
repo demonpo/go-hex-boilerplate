@@ -7,9 +7,16 @@ data "external_schema" "gorm" {
   ]
 }
 
+variable "database_url" {
+  type    = string
+  default = getenv("DATABASE_URL")
+}
+
+
 env "gorm" {
   src = data.external_schema.gorm.url
-  dev = "docker://postgres/16/dev?search_path=public"
+  dev = "docker://postgres/16/dev"
+  url = var.database_url
   migration {
     dir = "file://src/db/migrations"
   }

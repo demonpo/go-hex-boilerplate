@@ -23,23 +23,23 @@ func NewUserHandler(UserService *services.UserService) *UserHandler {
 	}
 }
 
-//func (h *UserHandler) CreateUser(ctx *gin.Context) {
-//	var user entities.User
-//	if err := ctx.ShouldBindJSON(&user); err != nil {
-//		HandleError(ctx, http.StatusBadRequest, err)
-//		return
-//	}
-//
-//	_, err := h.svc.CreateUser(user.Email, user.Password)
-//	if err != nil {
-//		HandleError(ctx, http.StatusBadRequest, err)
-//		return
-//	}
-//
-//	ctx.JSON(http.StatusCreated, gin.H{
-//		"message": "New user created successfully",
-//	})
-//}
+func (h *UserHandler) CreateUser(ctx *gin.Context) {
+	var user entities.User
+	if err := ctx.ShouldBindJSON(&user); err != nil {
+		HandleError(ctx, http.StatusBadRequest, err)
+		return
+	}
+
+	user, err := h.userService.GetById("ssss")
+	if err != nil {
+		HandleError(ctx, http.StatusBadRequest, err)
+		return
+	}
+
+	ctx.JSON(http.StatusCreated, gin.H{
+		"message": "New user created successfully",
+	})
+}
 
 func (h *UserHandler) ReadUser(ctx *gin.Context) {
 	id := ctx.Param("id")

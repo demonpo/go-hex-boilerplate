@@ -17,8 +17,11 @@ func NewPostgresUserRepository(db *db.DB) *PostgresUserRepository {
 }
 
 func (userRepository *PostgresUserRepository) GetById(id string) (entities.User, error) {
-	userRepository.db.DB.Create(&entities.User{Name: "Daniel", Email: ""})
-	return entities.User{Id: 1, Name: "Daniel", Email: "soul.daniel@hotmail.com"}, nil
+	newUser := entities.User{
+		Name: "Daniel", Email: "soul.daniel@hotmail.com",
+	}
+	userRepository.db.DB.Create(&newUser)
+	return newUser, nil
 }
 
 func (userRepository *PostgresUserRepository) GetByProperties(params repositories.GetByPropertiesParams) ([]entities.User, error) {
