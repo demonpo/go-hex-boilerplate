@@ -4,6 +4,7 @@ import (
 	"goHexBoilerplate/src/db"
 	"goHexBoilerplate/src/domain/contracts/entities"
 	"goHexBoilerplate/src/domain/contracts/repositories"
+	entitiesInfra "goHexBoilerplate/src/infra/entities"
 )
 
 type PostgresUserRepository struct {
@@ -17,11 +18,15 @@ func NewPostgresUserRepository(db *db.DB) *PostgresUserRepository {
 }
 
 func (userRepository *PostgresUserRepository) GetById(id string) (entities.User, error) {
-	newUser := entities.User{
+	newUser := entitiesInfra.User{
 		Name: "Daniel", Email: "soul.daniel@hotmail.com",
 	}
-	userRepository.db.DB.Create(&newUser)
-	return newUser, nil
+	userRepository.db.DB.Model(&entitiesInfra.User{}).Create(&newUser)
+	return entities.User{
+		Id:    int(newUser.ID),
+		Name:  newUser.Name,
+		Email: newUser.Email,
+	}, nil
 }
 
 func (userRepository *PostgresUserRepository) GetByProperties(params repositories.GetByPropertiesParams) ([]entities.User, error) {

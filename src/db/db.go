@@ -28,6 +28,12 @@ func NewDB() *DB {
 	if err != nil {
 		panic(err)
 	}
+
+	//println("Connected to database")
+	//err = db.Table("users").AutoMigrate(&entitiesInfra.User{})
+	//if err != nil {
+	//	panic("failed to auto migrate models")
+	//}
 	return &DB{
 		DB: db,
 	}
