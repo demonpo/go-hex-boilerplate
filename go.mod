@@ -1,6 +1,6 @@
 module goHexBoilerplate
 
-go 1.21
+go 1.22
 
 require (
 	ariga.io/atlas-provider-gorm v0.3.2

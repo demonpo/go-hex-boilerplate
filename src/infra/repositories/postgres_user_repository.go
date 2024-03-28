@@ -19,7 +19,7 @@ func NewPostgresUserRepository(db *db.DB) *PostgresUserRepository {
 
 func (userRepository *PostgresUserRepository) GetById(id string) (entities.User, error) {
 	newUser := entitiesInfra.User{
-		Name: "Daniel", Email: "soul.daniel@hotmail.com",
+		Name: "Daniel", Email: "soul.danielssss@hotmail.com",
 	}
 	userRepository.db.DB.Model(&entitiesInfra.User{}).Create(&newUser)
 	return entities.User{
