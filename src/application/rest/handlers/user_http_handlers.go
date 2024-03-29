@@ -1,11 +1,12 @@
-package handler
+package handlers
 
 import (
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	"github.com/golang-jwt/jwt/v5"
-	"goHexBoilerplate/src/domain/contracts/entities"
+	"goHexBoilerplate/src/application/rest/schemas"
 	"goHexBoilerplate/src/domain/services"
 	"net/http"
 	"strconv"
@@ -25,13 +26,22 @@ func NewUserHandler(UserService *services.UserService) *UserHandler {
 }
 
 func (h *UserHandler) CreateUser(ctx *gin.Context) {
-	var user entities.User
+	var user schemas.CreateUserSchema
 	if err := ctx.ShouldBindJSON(&user); err != nil {
 		HandleError(ctx, http.StatusBadRequest, err)
 		return
 	}
 
-	fmt.Printf("%+v\n", user)
+	validate := validator.New()
+
+	// Validate the User struct
+	err := validate.Struct(user)
+	if err != nil {
+		// Validation failed, handle the error
+		validationErrors := err.(validator.ValidationErrors)
+		HandleError(ctx, http.StatusBadRequest, validationErrors)
+		return
+	}
 
 	newUser, err := h.userService.Create(services.CreateInput{
 		Name:  user.Name,

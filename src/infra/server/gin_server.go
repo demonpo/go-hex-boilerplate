@@ -3,7 +3,7 @@ package server
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	handler "goHexBoilerplate/src/adapters/handlers"
+	"goHexBoilerplate/src/application/rest/handlers"
 	"goHexBoilerplate/src/domain/contracts/server"
 	"goHexBoilerplate/src/infra/fx"
 )
@@ -11,10 +11,10 @@ import (
 type GinServer struct {
 	Router *gin.Engine
 	server.AbstractServer
-	UserHandler *handler.UserHandler
+	UserHandler *handlers.UserHandler
 }
 
-func NewGinServer(config fx.AppConfig, userHandler *handler.UserHandler) *GinServer {
+func NewGinServer(config fx.AppConfig, userHandler *handlers.UserHandler) *GinServer {
 	fmt.Println("Hello, World!")
 	serv := GinServer{Router: gin.Default(), AbstractServer: server.AbstractServer{Port: config.Port}, UserHandler: userHandler}
 	serv.AbstractServer.Server = &serv
