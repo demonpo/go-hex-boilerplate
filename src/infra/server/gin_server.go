@@ -39,6 +39,7 @@ func (server *GinServer) Listen() {
 func (server *GinServer) setAppHandlers(router *gin.Engine) {
 	v1 := router.Group("/v1")
 	v1.GET("/users/:id", server.UserHandler.ReadUser)
+	v1.POST("/users", server.UserHandler.CreateUser)
 	v1.GET("/test", func(c *gin.Context) {
 		c.JSON(200, gin.H{"status": "OK"})
 	})

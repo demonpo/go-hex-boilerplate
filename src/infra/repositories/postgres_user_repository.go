@@ -1,10 +1,12 @@
 package repositories
 
 import (
+	"errors"
 	"goHexBoilerplate/src/db"
 	"goHexBoilerplate/src/domain/contracts/entities"
 	"goHexBoilerplate/src/domain/contracts/repositories"
 	entitiesInfra "goHexBoilerplate/src/infra/entities"
+	"gorm.io/gorm"
 )
 
 type PostgresUserRepository struct {
@@ -17,15 +19,37 @@ func NewPostgresUserRepository(db *db.DB) *PostgresUserRepository {
 	}
 }
 
-func (userRepository *PostgresUserRepository) GetById(id string) (entities.User, error) {
+func (userRepository *PostgresUserRepository) Create(params repositories.Create) (*entities.User, error) {
 	newUser := entitiesInfra.User{
-		Name: "Daniel", Email: "soul.danielssss@hotmail.com",
+		Name:  params.Name,
+		Email: params.Email,
 	}
-	userRepository.db.DB.Model(&entitiesInfra.User{}).Create(&newUser)
-	return entities.User{
-		Id:    int(newUser.ID),
-		Name:  newUser.Name,
-		Email: newUser.Email,
+	if err := userRepository.db.DB.Model(&entitiesInfra.User{}).Create(&newUser).Error; err != nil {
+		return nil, err
+	}
+	return &entities.User{
+		Id:        int(newUser.ID),
+		Name:      newUser.Name,
+		Email:     newUser.Email,
+		UpdatedAt: newUser.UpdatedAt,
+		CreatedAt: newUser.CreatedAt,
+	}, nil
+}
+
+func (userRepository *PostgresUserRepository) GetById(id int) (*entities.User, error) {
+	foundUser := entitiesInfra.User{}
+	if err := userRepository.db.DB.Model(&entitiesInfra.User{}).First(&foundUser, id).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.New("user not found")
+		}
+		return nil, err
+	}
+	return &entities.User{
+		Id:        int(foundUser.ID),
+		Name:      foundUser.Name,
+		Email:     foundUser.Email,
+		UpdatedAt: foundUser.UpdatedAt,
+		CreatedAt: foundUser.CreatedAt,
 	}, nil
 }
 

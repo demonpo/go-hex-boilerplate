@@ -8,6 +8,7 @@ import (
 	"goHexBoilerplate/src/domain/contracts/entities"
 	"goHexBoilerplate/src/domain/services"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -30,7 +31,12 @@ func (h *UserHandler) CreateUser(ctx *gin.Context) {
 		return
 	}
 
-	user, err := h.userService.GetById("ssss")
+	fmt.Printf("%+v\n", user)
+
+	newUser, err := h.userService.Create(services.CreateInput{
+		Name:  user.Name,
+		Email: user.Email,
+	})
 	if err != nil {
 		HandleError(ctx, http.StatusBadRequest, err)
 		return
@@ -38,11 +44,18 @@ func (h *UserHandler) CreateUser(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusCreated, gin.H{
 		"message": "New user created successfully",
+		"data":    newUser,
 	})
 }
 
 func (h *UserHandler) ReadUser(ctx *gin.Context) {
-	id := ctx.Param("id")
+	idString := ctx.Param("id")
+
+	id, err := strconv.Atoi(idString)
+	if err != nil {
+		HandleError(ctx, http.StatusBadRequest, err)
+		return
+	}
 
 	user, err := h.userService.GetById(id)
 
@@ -50,17 +63,17 @@ func (h *UserHandler) ReadUser(ctx *gin.Context) {
 		HandleError(ctx, http.StatusBadRequest, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, user)
+	ctx.JSON(http.StatusOK, *user)
 }
 
 func (h *UserHandler) ReadUsers(ctx *gin.Context) {
 
-	user, err := h.userService.GetById("1")
+	user, err := h.userService.GetById(1)
 	if err != nil {
 		HandleError(ctx, http.StatusBadRequest, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, []entities.User{user})
+	ctx.JSON(http.StatusOK, *user)
 }
 
 //func (h *UserHandler) UpdateUser(ctx *gin.Context) {

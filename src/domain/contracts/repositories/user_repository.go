@@ -8,7 +8,13 @@ type GetByPropertiesParams struct {
 	email string
 }
 
+type Create struct {
+	Name  string
+	Email string
+}
+
 type UserRepository interface {
-	GetById(id string) (entities.User, error)
+	GetById(id int) (*entities.User, error)
 	GetByProperties(params GetByPropertiesParams) ([]entities.User, error)
+	Create(params Create) (*entities.User, error)
 }
