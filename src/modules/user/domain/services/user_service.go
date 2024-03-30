@@ -1,8 +1,8 @@
 package services
 
 import (
-	"goHexBoilerplate/src/domain/contracts/entities"
-	"goHexBoilerplate/src/domain/contracts/repositories"
+	"goHexBoilerplate/src/modules/user/domain/contracts/entities"
+	"goHexBoilerplate/src/modules/user/domain/contracts/repositories"
 )
 
 type UserService struct {

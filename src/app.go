@@ -3,15 +3,15 @@ package main
 import (
 	"github.com/joho/godotenv"
 	"go.uber.org/fx"
-	"goHexBoilerplate/src/application/rest/handlers"
 	"goHexBoilerplate/src/db"
-	"goHexBoilerplate/src/domain/contracts"
-	domainRepositories "goHexBoilerplate/src/domain/contracts/repositories"
-	domainServer "goHexBoilerplate/src/domain/contracts/server"
-	"goHexBoilerplate/src/domain/services"
-	infraFx "goHexBoilerplate/src/infra/fx"
-	"goHexBoilerplate/src/infra/repositories"
-	"goHexBoilerplate/src/infra/server"
+	"goHexBoilerplate/src/modules/user/application/rest/handlers"
+	domainRepositories "goHexBoilerplate/src/modules/user/domain/contracts/repositories"
+	"goHexBoilerplate/src/modules/user/domain/services"
+	"goHexBoilerplate/src/modules/user/infra/repositories"
+	"goHexBoilerplate/src/shared/contracts"
+	domainServer "goHexBoilerplate/src/shared/contracts/server"
+	infraFx "goHexBoilerplate/src/shared/infra/fx"
+	"goHexBoilerplate/src/shared/infra/server"
 )
 
 func main() {

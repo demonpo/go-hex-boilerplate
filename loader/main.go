@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"ariga.io/atlas-provider-gorm/gormschema"
-	entitiesInfra "goHexBoilerplate/src/infra/entities"
+	entitiesInfra "goHexBoilerplate/src/modules/user/infra/entities"
 )
 
 func main() {

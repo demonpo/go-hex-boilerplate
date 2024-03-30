@@ -3,9 +3,9 @@ package repositories
 import (
 	"errors"
 	"goHexBoilerplate/src/db"
-	"goHexBoilerplate/src/domain/contracts/entities"
-	"goHexBoilerplate/src/domain/contracts/repositories"
-	entitiesInfra "goHexBoilerplate/src/infra/entities"
+	"goHexBoilerplate/src/modules/user/domain/contracts/entities"
+	"goHexBoilerplate/src/modules/user/domain/contracts/repositories"
+	entitiesInfra "goHexBoilerplate/src/modules/user/infra/entities"
 	"gorm.io/gorm"
 )
 

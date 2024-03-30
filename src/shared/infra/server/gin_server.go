@@ -3,9 +3,9 @@ package server
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"goHexBoilerplate/src/application/rest/handlers"
-	"goHexBoilerplate/src/domain/contracts/server"
-	"goHexBoilerplate/src/infra/fx"
+	"goHexBoilerplate/src/modules/user/application/rest/handlers"
+	"goHexBoilerplate/src/shared/contracts/server"
+	"goHexBoilerplate/src/shared/infra/fx"
 )
 
 type GinServer struct {

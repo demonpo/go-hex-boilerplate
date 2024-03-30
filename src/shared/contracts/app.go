@@ -1,6 +1,6 @@
 package contracts
 
-import "goHexBoilerplate/src/domain/contracts/server"
+import "goHexBoilerplate/src/shared/contracts/server"
 
 type App struct {
 	appName string

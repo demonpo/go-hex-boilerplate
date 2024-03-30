@@ -2,7 +2,7 @@ package gateways
 
 import (
 	"go.uber.org/zap"
-	"goHexBoilerplate/src/domain/contracts/gateways"
+	"goHexBoilerplate/src/shared/contracts/gateways"
 )
 
 type ZapLogger struct {

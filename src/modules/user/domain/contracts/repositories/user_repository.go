@@ -1,6 +1,6 @@
 package repositories
 
-import "goHexBoilerplate/src/domain/contracts/entities"
+import "goHexBoilerplate/src/modules/user/domain/contracts/entities"
 
 type GetByPropertiesParams struct {
 	id    int

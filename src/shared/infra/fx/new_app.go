@@ -3,8 +3,8 @@ package fx
 import (
 	"context"
 	"go.uber.org/fx"
-	"goHexBoilerplate/src/domain/contracts"
-	"goHexBoilerplate/src/domain/contracts/server"
+	"goHexBoilerplate/src/shared/contracts"
+	"goHexBoilerplate/src/shared/contracts/server"
 )
 
 func NewApp(lc fx.Lifecycle, s server.Server) *contracts.App {
