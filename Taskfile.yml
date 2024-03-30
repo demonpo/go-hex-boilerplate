@@ -6,9 +6,6 @@ tasks:
   build:
     cmds:
       - go build -o app ./src/app.go
-  install-migrate:
-    cmds:
-      - go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
   db:create-migration:
     cmds:
       - source load-envs && atlas migrate diff --env gorm
