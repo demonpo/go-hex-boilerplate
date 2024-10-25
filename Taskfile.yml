@@ -18,3 +18,6 @@ tasks:
   db:create-entity:
     cmds:
       - go run -mod=mod entgo.io/ent/cmd/ent new {{.CLI_ARGS}}
+  db:generate:
+    cmds:
+      - go generate ./ent
