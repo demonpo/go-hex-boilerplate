@@ -20,8 +20,13 @@ func NewPostgresUserRepository(db *db.DB) *PostgresUserRepository {
 	}
 }
 
-func (userRepository *PostgresUserRepository) Create(params repositories.Create) (*entities.User, error) {
-	newUser, err := userRepository.db.DB.User.Create().SetName(params.Name).SetEmail(params.Email).Save(context.Background())
+func (userRepository *PostgresUserRepository) Create(
+	params repositories.Create,
+) (*entities.User, error) {
+	newUser, err := userRepository.db.DB.User.Create().
+		SetName(params.Name).
+		SetEmail(params.Email).
+		Save(context.Background())
 	if err != nil {
 		return nil, err
 	}
@@ -51,6 +56,11 @@ func (userRepository *PostgresUserRepository) GetById(id uuid.UUID) (*entities.U
 	}, nil
 }
 
-func (userRepository *PostgresUserRepository) GetByProperties(params repositories.GetByPropertiesParams) ([]entities.User, error) {
-	return []entities.User{entities.User{Id: uuid.UUID{}, Name: "Daniel", Email: "soul.daniel@hotmail.com"}, entities.User{Id: uuid.UUID{}, Name: "Xavier", Email: "xavicoGarcia12@gmail.com"}}, nil
+func (userRepository *PostgresUserRepository) GetByProperties(
+	params repositories.GetByPropertiesParams,
+) ([]entities.User, error) {
+	return []entities.User{
+		entities.User{Id: uuid.UUID{}, Name: "Daniel", Email: "soul.daniel@hotmail.com"},
+		entities.User{Id: uuid.UUID{}, Name: "Xavier", Email: "xavicoGarcia12@gmail.com"},
+	}, nil
 }
