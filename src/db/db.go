@@ -1,14 +1,16 @@
 package db
 
 import (
+	"context"
 	"fmt"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
+	_ "github.com/lib/pq"
+	"goHexBoilerplate/ent"
+	"log"
 	"os"
 )
 
 type DB struct {
-	DB *gorm.DB
+	DB *ent.Client
 }
 
 // new database
@@ -22,19 +24,15 @@ func NewDB() *DB {
 	conn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		host, port, user, password, dbname)
 
-	db, err := gorm.Open(postgres.New(postgres.Config{
-		DSN: conn,
-	}), &gorm.Config{})
+	client, err := ent.Open("postgres", conn)
 	if err != nil {
-		panic(err)
+		log.Fatalf("failed opening connection to postgres: %v", err)
 	}
-
-	//println("Connected to database")
-	//err = db.Table("users").AutoMigrate(&entitiesInfra.User{})
-	//if err != nil {
-	//	panic("failed to auto migrate models")
-	//}
+	// Run the auto migration tool.
+	if err := client.Schema.Create(context.Background()); err != nil {
+		log.Fatalf("failed creating schema resources: %v", err)
+	}
 	return &DB{
-		DB: db,
+		DB: client,
 	}
 }

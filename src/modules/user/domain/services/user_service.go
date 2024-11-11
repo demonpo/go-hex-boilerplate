@@ -1,6 +1,7 @@
 package services
 
 import (
+	"github.com/google/uuid"
 	"goHexBoilerplate/src/modules/user/domain/contracts/entities"
 	"goHexBoilerplate/src/modules/user/domain/contracts/repositories"
 )
@@ -18,7 +19,7 @@ func NewUserService(userRepository repositories.UserRepository) *UserService {
 	return &UserService{userRepository: userRepository}
 }
 
-func (userService *UserService) GetById(id int) (*entities.User, error) {
+func (userService *UserService) GetById(id uuid.UUID) (*entities.User, error) {
 	userRepository := userService.userRepository
 	return userRepository.GetById(id)
 }

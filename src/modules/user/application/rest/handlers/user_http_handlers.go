@@ -6,10 +6,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 	"goHexBoilerplate/src/modules/user/application/rest/schemas"
 	"goHexBoilerplate/src/modules/user/domain/services"
 	"net/http"
-	"strconv"
 	"time"
 )
 
@@ -61,7 +61,7 @@ func (h *UserHandler) CreateUser(ctx *gin.Context) {
 func (h *UserHandler) ReadUser(ctx *gin.Context) {
 	idString := ctx.Param("id")
 
-	id, err := strconv.Atoi(idString)
+	id, err := uuid.Parse(idString)
 	if err != nil {
 		HandleError(ctx, http.StatusBadRequest, err)
 		return
@@ -78,7 +78,7 @@ func (h *UserHandler) ReadUser(ctx *gin.Context) {
 
 func (h *UserHandler) ReadUsers(ctx *gin.Context) {
 
-	user, err := h.userService.GetById(1)
+	user, err := h.userService.GetById(uuid.UUID{})
 	if err != nil {
 		HandleError(ctx, http.StatusBadRequest, err)
 		return

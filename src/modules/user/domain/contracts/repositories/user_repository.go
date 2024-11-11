@@ -1,9 +1,12 @@
 package repositories
 
-import "goHexBoilerplate/src/modules/user/domain/contracts/entities"
+import (
+	"github.com/google/uuid"
+	"goHexBoilerplate/src/modules/user/domain/contracts/entities"
+)
 
 type GetByPropertiesParams struct {
-	id    int
+	id    uuid.UUID
 	name  string
 	email string
 }
@@ -14,7 +17,7 @@ type Create struct {
 }
 
 type UserRepository interface {
-	GetById(id int) (*entities.User, error)
+	GetById(id uuid.UUID) (*entities.User, error)
 	GetByProperties(params GetByPropertiesParams) ([]entities.User, error)
 	Create(params Create) (*entities.User, error)
 }

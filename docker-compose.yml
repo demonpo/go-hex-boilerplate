@@ -1,5 +1,3 @@
-version: '3.7'
-
 services:
   app:
     container_name: app
@@ -10,10 +8,6 @@ services:
     env_file:
       - ./.env
     environment:
-      POSTGRESQL_HOST: database
-      POSTGRESQL_USERNAME: postgres
-      POSTGRESQL_PASSWORD: password
-      POSTGRESQL_DATABASE: test
       DB_HOST: database
       DB_PORT: 5432
       DB_USER: postgres

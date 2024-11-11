@@ -1,6 +1,7 @@
 package services
 
 import (
+	"github.com/google/uuid"
 	"goHexBoilerplate/src/modules/user/domain/contracts/entities"
 	"goHexBoilerplate/src/modules/user/test/mocks"
 	"testing"
@@ -11,14 +12,14 @@ func TestUserService_GetUserById(t *testing.T) {
 	userRepositoryMock := &mocks.UserRepositoryMock{}
 
 	// Set up expected behavior for GetById method
-	expectedUser := &entities.User{Id: 1, Name: "John Doe", Email: "some@email.com"}
-	userRepositoryMock.On("GetById", 1).Return(expectedUser, nil)
+	expectedUser := &entities.User{Id: uuid.UUID{}, Name: "John Doe", Email: "some@email.com"}
+	userRepositoryMock.On("GetById", uuid.UUID{}).Return(expectedUser, nil)
 
 	// Pass the mock to your UserService or whatever service you are testing
 	userService := NewUserService(userRepositoryMock)
 
 	// Call the method you want to test
-	user, err := userService.GetById(1)
+	user, err := userService.GetById(uuid.UUID{})
 
 	// Assert the results
 	if err != nil {

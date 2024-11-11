@@ -1,6 +1,7 @@
 package mocks
 
 import (
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/mock"
 	"goHexBoilerplate/src/modules/user/domain/contracts/entities"
 	"goHexBoilerplate/src/modules/user/domain/contracts/repositories"
@@ -12,7 +13,7 @@ type UserRepositoryMock struct {
 }
 
 // GetById provides a mock function for GetById method
-func (m *UserRepositoryMock) GetById(id int) (*entities.User, error) {
+func (m *UserRepositoryMock) GetById(id uuid.UUID) (*entities.User, error) {
 	args := m.Called(id)
 	return args.Get(0).(*entities.User), args.Error(1)
 }
