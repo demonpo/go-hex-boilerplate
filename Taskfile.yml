@@ -6,6 +6,14 @@ tasks:
   build:
     cmds:
       - go build -o app ./src/app.go
+  build:image:prod:
+    desc: Build production image using Dockerfile.prod and production ignore file
+    cmds:
+      - docker build -f Dockerfile.prod --ignorefile .dockerignore.prod -t url-shortener:prod .
+  build:image:prod-nc:
+    desc: Build production image without cache
+    cmds:
+      - docker build --no-cache -f Dockerfile.prod --ignorefile .dockerignore.prod -t url-shortener:prod .
   db:create-migration:
     cmds:
       - source load-envs && atlas migrate diff --env gorm
@@ -15,12 +23,3 @@ tasks:
   install-atlas:
     cmds:
       - curl -sSf https://atlasgo.sh | sh
-  install-golines:
-    cmds:
-      - go install github.com/segmentio/golines@latest
-  db:create-entity:
-    cmds:
-      - go run -mod=mod entgo.io/ent/cmd/ent new {{.CLI_ARGS}}
-  db:generate:
-    cmds:
-      - go generate ./ent

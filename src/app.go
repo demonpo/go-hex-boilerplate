@@ -1,8 +1,6 @@
 package main
 
 import (
-	"github.com/joho/godotenv"
-	"go.uber.org/fx"
 	"goHexBoilerplate/src/db"
 	"goHexBoilerplate/src/modules/user/application/rest/handlers"
 	domainRepositories "goHexBoilerplate/src/modules/user/domain/contracts/repositories"
@@ -12,6 +10,9 @@ import (
 	domainServer "goHexBoilerplate/src/shared/contracts/server"
 	infraFx "goHexBoilerplate/src/shared/infra/fx"
 	"goHexBoilerplate/src/shared/infra/server"
+
+	"github.com/joho/godotenv"
+	"go.uber.org/fx"
 )
 
 func main() {
@@ -31,7 +32,7 @@ func main() {
 			handlers.NewUserHandler,
 			infraFx.NewApp,
 			fx.Annotate(
-				server.NewGinServer,
+				server.NewFiberServer,
 				fx.As(new(domainServer.Server)),
 			),
 		),

@@ -1,38 +1,41 @@
 package db
 
 import (
-	"context"
 	"fmt"
-	_ "github.com/lib/pq"
-	"goHexBoilerplate/ent"
-	"log"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 	"os"
 )
 
 type DB struct {
-	DB *ent.Client
+	DB *gorm.DB
 }
 
-// new database
+// NewDB initializes a Postgres connection. It supports either:
+// 1. DATABASE_URL (full URL) OR
+// 2. Individual DB_* variables: DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME
 func NewDB() *DB {
-	host := os.Getenv("DB_HOST")
-	port := os.Getenv("DB_PORT")
-	user := os.Getenv("DB_USER")
-	password := os.Getenv("DB_PASSWORD")
-	dbname := os.Getenv("DB_NAME")
+	var dsn string
 
-	conn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-		host, port, user, password, dbname)
+	if full := os.Getenv("DATABASE_URL"); full != "" {
+		dsn = full
+	} else {
+		host := os.Getenv("DB_HOST")
+		port := os.Getenv("DB_PORT")
+		user := os.Getenv("DB_USER")
+		password := os.Getenv("DB_PASSWORD")
+		dbname := os.Getenv("DB_NAME")
 
-	client, err := ent.Open("postgres", conn)
+		if host == "" || port == "" || user == "" || dbname == "" {
+			panic("missing database configuration: set DATABASE_URL or DB_HOST, DB_PORT, DB_USER, DB_NAME")
+		}
+		dsn = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
+	}
+
+	db, err := gorm.Open(postgres.New(postgres.Config{DSN: dsn}), &gorm.Config{})
 	if err != nil {
-		log.Fatalf("failed opening connection to postgres: %v", err)
+		panic(err)
 	}
-	// Run the auto migration tool.
-	if err := client.Schema.Create(context.Background()); err != nil {
-		log.Fatalf("failed creating schema resources: %v", err)
-	}
-	return &DB{
-		DB: client,
-	}
+
+	return &DB{DB: db}
 }

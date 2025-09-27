@@ -1,13 +1,13 @@
 package repositories
 
 import (
-	"context"
 	"fmt"
-	"github.com/google/uuid"
-	"goHexBoilerplate/ent/user"
 	"goHexBoilerplate/src/db"
-	"goHexBoilerplate/src/modules/user/domain/contracts/entities"
-	"goHexBoilerplate/src/modules/user/domain/contracts/repositories"
+	domainEntities "goHexBoilerplate/src/modules/user/domain/contracts/entities"
+	domainRepositories "goHexBoilerplate/src/modules/user/domain/contracts/repositories"
+	infraEntities "goHexBoilerplate/src/modules/user/infra/entities"
+
+	"github.com/google/uuid"
 )
 
 type PostgresUserRepository struct {
@@ -21,46 +21,44 @@ func NewPostgresUserRepository(db *db.DB) *PostgresUserRepository {
 }
 
 func (userRepository *PostgresUserRepository) Create(
-	params repositories.Create,
-) (*entities.User, error) {
-	newUser, err := userRepository.db.DB.User.Create().
-		SetName(params.Name).
-		SetEmail(params.Email).
-		Save(context.Background())
-	if err != nil {
+	params domainRepositories.Create,
+) (*domainEntities.User, error) {
+	gormUser := &infraEntities.User{
+		Name:  params.Name,
+		Email: params.Email,
+	}
+	if err := userRepository.db.DB.Create(gormUser).Error; err != nil {
 		return nil, err
 	}
-	return &entities.User{
-		Id:        newUser.ID,
-		Name:      newUser.Name,
-		Email:     newUser.Email,
-		UpdatedAt: newUser.UpdatedAt,
-		CreatedAt: newUser.CreatedAt,
+	return &domainEntities.User{
+		Id:        gormUser.ID,
+		Name:      gormUser.Name,
+		Email:     gormUser.Email,
+		UpdatedAt: gormUser.UpdatedAt,
+		CreatedAt: gormUser.CreatedAt,
 	}, nil
 }
 
-func (userRepository *PostgresUserRepository) GetById(id uuid.UUID) (*entities.User, error) {
-	foundUser, err := userRepository.db.DB.User.
-		Query().
-		Where(user.IDEQ(id)).
-		Only(context.Background())
-	if err != nil {
-		return nil, fmt.Errorf("failed to find user by ID %d: %w", id, err)
+func (userRepository *PostgresUserRepository) GetById(id uuid.UUID) (*domainEntities.User, error) {
+	var gormUser infraEntities.User
+	if err := userRepository.db.DB.First(&gormUser, "id = ?", id).Error; err != nil {
+		return nil, fmt.Errorf("failed to find user by ID %s: %w", id, err)
 	}
-	return &entities.User{
-		Id:        foundUser.ID,
-		Name:      foundUser.Name,
-		Email:     foundUser.Email,
-		UpdatedAt: foundUser.UpdatedAt,
-		CreatedAt: foundUser.CreatedAt,
+	return &domainEntities.User{
+		Id:        gormUser.ID,
+		Name:      gormUser.Name,
+		Email:     gormUser.Email,
+		UpdatedAt: gormUser.UpdatedAt,
+		CreatedAt: gormUser.CreatedAt,
 	}, nil
 }
 
 func (userRepository *PostgresUserRepository) GetByProperties(
-	params repositories.GetByPropertiesParams,
-) ([]entities.User, error) {
-	return []entities.User{
-		entities.User{Id: uuid.UUID{}, Name: "Daniel", Email: "soul.daniel@hotmail.com"},
-		entities.User{Id: uuid.UUID{}, Name: "Xavier", Email: "xavicoGarcia12@gmail.com"},
+	params domainRepositories.GetByPropertiesParams,
+) ([]domainEntities.User, error) {
+	// Not implemented yet. Return demo data as before.
+	return []domainEntities.User{
+		{Id: uuid.UUID{}, Name: "Daniel", Email: "soul.daniel@hotmail.com"},
+		{Id: uuid.UUID{}, Name: "Xavier", Email: "xavicoGarcia12@gmail.com"},
 	}, nil
 }

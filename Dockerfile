@@ -1,4 +1,4 @@
-FROM golang:1.24 as common-build-stage
+FROM golang:1.25 as common-build-stage
 WORKDIR /app
 COPY . .
 RUN go mod download

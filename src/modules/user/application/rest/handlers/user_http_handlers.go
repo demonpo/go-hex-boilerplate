@@ -3,7 +3,7 @@ package handlers
 import (
 	"errors"
 	"fmt"
-	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
 	"github.com/go-playground/validator/v10"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
@@ -25,11 +25,10 @@ func NewUserHandler(UserService *services.UserService) *UserHandler {
 	}
 }
 
-func (h *UserHandler) CreateUser(ctx *gin.Context) {
+func (h *UserHandler) CreateUser(ctx *fiber.Ctx) error {
 	var user schemas.CreateUserSchema
-	if err := ctx.ShouldBindJSON(&user); err != nil {
-		HandleError(ctx, http.StatusBadRequest, err)
-		return
+	if err := ctx.BodyParser(&user); err != nil {
+		return HandleError(ctx, http.StatusBadRequest, err)
 	}
 
 	validate := validator.New()
@@ -39,8 +38,7 @@ func (h *UserHandler) CreateUser(ctx *gin.Context) {
 	if err != nil {
 		// Validation failed, handle the error
 		validationErrors := err.(validator.ValidationErrors)
-		HandleError(ctx, http.StatusBadRequest, validationErrors)
-		return
+		return HandleError(ctx, http.StatusBadRequest, validationErrors)
 	}
 
 	newUser, err := h.userService.Create(services.CreateInput{
@@ -48,42 +46,38 @@ func (h *UserHandler) CreateUser(ctx *gin.Context) {
 		Email: user.Email,
 	})
 	if err != nil {
-		HandleError(ctx, http.StatusBadRequest, err)
-		return
+		return HandleError(ctx, http.StatusBadRequest, err)
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{
+	return ctx.Status(http.StatusCreated).JSON(fiber.Map{
 		"message": "New user created successfully",
 		"data":    newUser,
 	})
 }
 
-func (h *UserHandler) ReadUser(ctx *gin.Context) {
-	idString := ctx.Param("id")
+func (h *UserHandler) ReadUser(ctx *fiber.Ctx) error {
+	idString := ctx.Params("id")
 
 	id, err := uuid.Parse(idString)
 	if err != nil {
-		HandleError(ctx, http.StatusBadRequest, err)
-		return
+		return HandleError(ctx, http.StatusBadRequest, err)
 	}
 
 	user, err := h.userService.GetById(id)
 
 	if err != nil {
-		HandleError(ctx, http.StatusBadRequest, err)
-		return
+		return HandleError(ctx, http.StatusBadRequest, err)
 	}
-	ctx.JSON(http.StatusOK, *user)
+	return ctx.Status(http.StatusOK).JSON(*user)
 }
 
-func (h *UserHandler) ReadUsers(ctx *gin.Context) {
+func (h *UserHandler) ReadUsers(ctx *fiber.Ctx) error {
 
 	user, err := h.userService.GetById(uuid.UUID{})
 	if err != nil {
-		HandleError(ctx, http.StatusBadRequest, err)
-		return
+		return HandleError(ctx, http.StatusBadRequest, err)
 	}
-	ctx.JSON(http.StatusOK, *user)
+	return ctx.Status(http.StatusOK).JSON(*user)
 }
 
 //func (h *UserHandler) UpdateUser(ctx *gin.Context) {
